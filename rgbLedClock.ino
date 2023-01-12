@@ -82,6 +82,9 @@ void setup() {
 	}
 	else {
 		Serial.print("setup wait");
+		ledRgbBuf[cntSetupInd++].r = SETUP_IND_BRIGHTNESS; 
+		int len = convRgb2SpiBitStream(ptSpiTxBuf, ledRgbBuf, LEN_LED_BUF);
+   		master.transfer(ptSpiTxBuf, len);
 	}
 	sc.webConfig(setupMode);
 	strcpy(ssid, sc.getSsid());
@@ -230,12 +233,7 @@ static void progress(void)
 {
 	Serial.print("*");
 	if(LEN_LED_BUF > cntSetupInd) {
-		if(CONF_WITHOUT_TIMEOUT == setupMode) {
-			ledRgbBuf[cntSetupInd++].r = SETUP_IND_BRIGHTNESS;
-		}
-		else {
-			ledRgbBuf[cntSetupInd++].b = SETUP_IND_BRIGHTNESS;
-		}
+		ledRgbBuf[cntSetupInd++].b = SETUP_IND_BRIGHTNESS;
 		int len = convRgb2SpiBitStream(ptSpiTxBuf, ledRgbBuf, LEN_LED_BUF);
    		master.transfer(ptSpiTxBuf, len);
 	}
